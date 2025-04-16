@@ -22,7 +22,7 @@ namespace Lib_System.Services
             {
                 conn.Open();
                 var existing = conn.QueryFirstOrDefault<LogUser>(
-                    "SELECT * FROM MA_log_users WHERE username = @Username OR email = @Email",
+                    "SELECT id, username, email, password_hash as PasswordHash FROM MA_log_users WHERE username = @Username OR email = @Email",
                     new { user.Username, user.Email });
                 if (existing != null) return false;
                 user.PasswordHash = _hasher.Hash(plainPassword);
@@ -37,7 +37,8 @@ namespace Lib_System.Services
             {
                 conn.Open();
                 var user = conn.QueryFirstOrDefault<LogUser>(
-                    "SELECT * FROM MA_log_users WHERE username = @Username", new { Username = username });
+                    "SELECT id, username, email, password_hash as PasswordHash FROM MA_log_users WHERE username = @Username",
+                    new { Username = username });
                 if (user == null) return false;
                 return user.PasswordHash == _hasher.Hash(plainPassword);
             }
