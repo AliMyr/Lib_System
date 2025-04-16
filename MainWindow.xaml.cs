@@ -1,10 +1,13 @@
-﻿namespace Lib_System
+﻿using System.Windows;
+namespace Lib_System
 {
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow() => InitializeComponent();
+
+        private void ShowAuthors_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            new Views.AuthorsWindow().Show();
         }
     }
 }
