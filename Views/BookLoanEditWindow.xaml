@@ -1,0 +1,35 @@
+﻿<Window x:Class="Lib_System.Views.BookLoanEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit Loan" Height="300" Width="320">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Reader ID:"/>
+        <TextBox x:Name="ReaderBox" Grid.Row="1" Margin="0,5"/>
+
+        <TextBlock Text="Copy ID:" Grid.Row="2" Margin="0,10,0,0"/>
+        <TextBox x:Name="CopyBox" Grid.Row="3" Margin="0,5"/>
+
+        <TextBlock Text="Loan Date (yyyy-MM-dd):" Grid.Row="4" Margin="0,10,0,0"/>
+        <TextBox x:Name="LoanDateBox" Grid.Row="5" Margin="0,5"/>
+
+        <TextBlock Text="Return Date:" Grid.Row="6" Margin="0,10,0,0"/>
+        <TextBox x:Name="ReturnDateBox" Grid.Row="7" Margin="0,5"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="8" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="OK" Width="80" Margin="0,0,10,0" Click="Ok_Click"/>
+            <Button Content="Cancel" Width="80" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
