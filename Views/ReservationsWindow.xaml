@@ -1,0 +1,15 @@
+﻿<Window x:Class="Lib_System.Views.ReservationsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reservations" Height="350" Width="700">
+    <DataGrid x:Name="ResGrid" AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="ID"    Binding="{Binding Id}"               Width="Auto"/>
+            <DataGridTextColumn Header="Reader" Binding="{Binding ReaderId}"      Width="*"/>
+            <DataGridTextColumn Header="Room"   Binding="{Binding RoomId}"        Width="*"/>
+            <DataGridTextColumn Header="Date"   Binding="{Binding ReservationDate}" Width="Auto"/>
+            <DataGridTextColumn Header="From"   Binding="{Binding StartTime}"      Width="Auto"/>
+            <DataGridTextColumn Header="To"     Binding="{Binding EndTime}"        Width="Auto"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

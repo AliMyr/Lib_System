@@ -112,15 +112,28 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Author.cs" />
+    <Compile Include="Models\AuthorBook.cs" />
     <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookCopy.cs" />
+    <Compile Include="Models\BookLoan.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\Reader.cs" />
+    <Compile Include="Models\ReadingRoom.cs" />
+    <Compile Include="Models\Reservation.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\Staff.cs" />
+    <Compile Include="Services\Interfaces\AuthorBookService\AuthorBookService.cs" />
+    <Compile Include="Services\Interfaces\AuthorBookService\IAuthorBookService.cs" />
     <Compile Include="Services\Interfaces\AuthorService\AuthorService.cs" />
     <Compile Include="Services\Interfaces\AuthorService\IAuthorService.cs" />
     <Compile Include="Services\Interfaces\AuthService\AuthService.cs" />
     <Compile Include="Services\Interfaces\AuthService\IAuthService.cs" />
+    <Compile Include="Services\Interfaces\BookCopyService\BookCopyService.cs" />
+    <Compile Include="Services\Interfaces\BookCopyService\IBookCopyService.cs" />
+    <Compile Include="Services\Interfaces\BookLoanService\BookLoanService.cs" />
+    <Compile Include="Services\Interfaces\BookLoanService\IBookLoanService.cs" />
     <Compile Include="Services\Interfaces\BookService\BookService.cs" />
     <Compile Include="Services\Interfaces\BookService\IBookService.cs" />
     <Compile Include="Services\Interfaces\DbService\DbService.cs" />
@@ -135,8 +148,25 @@
     <Compile Include="Services\Interfaces\PublisherService\PublisherService.cs" />
     <Compile Include="Services\Interfaces\ReaderService\IReaderService.cs" />
     <Compile Include="Services\Interfaces\ReaderService\ReaderService.cs" />
+    <Compile Include="Services\Interfaces\ReadingRoomService\IReadingRoomService.cs" />
+    <Compile Include="Services\Interfaces\ReadingRoomService\ReadingRoomService.cs" />
+    <Compile Include="Services\Interfaces\ReservationService\IReservationService.cs" />
+    <Compile Include="Services\Interfaces\ReservationService\ReservationService.cs" />
+    <Compile Include="Services\Interfaces\RoleService\IRoleService.cs" />
+    <Compile Include="Services\Interfaces\RoleService\RoleService.cs" />
+    <Compile Include="Services\Interfaces\StaffService\IStaffService.cs" />
+    <Compile Include="Services\Interfaces\StaffService\StaffService.cs" />
+    <Compile Include="Views\AuthorBookWindow.xaml.cs">
+      <DependentUpon>AuthorBookWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AuthorsWindow.xaml.cs">
       <DependentUpon>AuthorsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BookCopiesWindow.xaml.cs">
+      <DependentUpon>BookCopiesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BookLoansWindow.xaml.cs">
+      <DependentUpon>BookLoansWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BooksWindow.xaml.cs">
       <DependentUpon>BooksWindow.xaml</DependentUpon>
@@ -156,9 +186,33 @@
     <Compile Include="Views\ReadersWindow.xaml.cs">
       <DependentUpon>ReadersWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReadingRoomsWindow.xaml.cs">
+      <DependentUpon>ReadingRoomsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReservationsWindow.xaml.cs">
+      <DependentUpon>ReservationsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RolesWindow.xaml.cs">
+      <DependentUpon>RolesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StaffWindow.xaml.cs">
+      <DependentUpon>StaffWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\AuthorBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BookCopiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BookLoansWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GenresWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -199,7 +253,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReadingRoomsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReservationsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RolesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StaffWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,12 @@
+﻿<Window x:Class="Lib_System.Views.AuthorBookWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Author–Book Relations" Height="300" Width="400">
+    <DataGrid x:Name="RelGrid" AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="ID"      Binding="{Binding Id}"       Width="Auto"/>
+            <DataGridTextColumn Header="Author"  Binding="{Binding AuthorId}" Width="*"/>
+            <DataGridTextColumn Header="Book"    Binding="{Binding BookId}"   Width="*"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

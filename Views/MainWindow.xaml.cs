@@ -25,5 +25,26 @@ namespace Lib_System
         private void ShowPublishers_Click(object sender, RoutedEventArgs e)
             => new PublishersWindow().Show();
 
+        private void ShowAuthorBook_Click(object sender, RoutedEventArgs e)
+            => new Views.AuthorBookWindow().Show();
+
+        private void ShowCopies_Click(object sender, RoutedEventArgs e)
+            => new Views.BookCopiesWindow().Show();
+
+        private void ShowLoans_Click(object sender, RoutedEventArgs e)
+            => new Views.BookLoansWindow().Show();
+
+        private void ShowRooms_Click(object sender, RoutedEventArgs e)
+            => new Views.ReadingRoomsWindow().Show();
+
+        private void ShowReservations_Click(object sender, RoutedEventArgs e)
+            => new Views.ReservationsWindow().Show();
+
+        private void ShowRoles_Click(object sender, RoutedEventArgs e)
+            => new Views.RolesWindow().Show();
+
+        private void ShowStaff_Click(object sender, RoutedEventArgs e)
+            => new Views.StaffWindow().Show();
+
     }
 }
