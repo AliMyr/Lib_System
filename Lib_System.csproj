@@ -189,6 +189,9 @@
     <Compile Include="Views\PublishersWindow.xaml.cs">
       <DependentUpon>PublishersWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReaderEditWindow.xaml.cs">
+      <DependentUpon>ReaderEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReadersWindow.xaml.cs">
       <DependentUpon>ReadersWindow.xaml</DependentUpon>
     </Compile>
@@ -260,6 +263,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PublishersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReaderEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
