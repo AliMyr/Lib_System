@@ -159,6 +159,9 @@
     <Compile Include="Views\AuthorBookWindow.xaml.cs">
       <DependentUpon>AuthorBookWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AuthorEditWindow.xaml.cs">
+      <DependentUpon>AuthorEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AuthorsWindow.xaml.cs">
       <DependentUpon>AuthorsWindow.xaml</DependentUpon>
     </Compile>
@@ -202,6 +205,10 @@
       <DependentUpon>StaffWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AuthorBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AuthorEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

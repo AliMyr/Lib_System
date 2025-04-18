@@ -1,23 +1,48 @@
-﻿using System.Windows;
-using Lib_System.Services.Interfaces;
+﻿using System.Linq;
+using System.Windows;
+using Lib_System.Models;
 using Lib_System.Services;
+using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
 {
     public partial class AuthorsWindow : Window
     {
-        private readonly IAuthorService _authorService;
+        private readonly IAuthorService _svc;
+
         public AuthorsWindow()
         {
             InitializeComponent();
-            var dbService = new DbService();
-            _authorService = new AuthorService(dbService);
-            LoadAuthors();
+            _svc = new AuthorService(new DbService());
+            Load();
         }
 
-        private void LoadAuthors()
+        private void Load()
+            => AuthorsDataGrid.ItemsSource = _svc.GetAllAuthors().ToList();
+
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
-            AuthorsDataGrid.ItemsSource = _authorService.GetAllAuthors();
+            var win = new AuthorEditWindow(_svc);
+            if (win.ShowDialog() == true) Load();
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            if (AuthorsDataGrid.SelectedItem is Author a)
+            {
+                var win = new AuthorEditWindow(_svc, a);
+                if (win.ShowDialog() == true) Load();
+            }
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (AuthorsDataGrid.SelectedItem is Author a &&
+                MessageBox.Show("Delete?", "", MessageBoxButton.YesNo)== MessageBoxResult.Yes)
+            {
+                _svc.DeleteAuthor(a.Id);
+                Load();
+            }
         }
     }
 }
