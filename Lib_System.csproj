@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="Views\PublisherEditWindow.xaml.cs">
       <DependentUpon>PublisherEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogSessionEditWindow.xaml.cs">
       <DependentUpon>LogSessionEditWindow.xaml</DependentUpon>
     </Compile>
