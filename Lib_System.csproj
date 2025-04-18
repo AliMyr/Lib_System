@@ -219,6 +219,9 @@
     <Compile Include="Views\RolesWindow.xaml.cs">
       <DependentUpon>RolesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StaffEditWindow.xaml.cs">
+      <DependentUpon>StaffEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StaffWindow.xaml.cs">
       <DependentUpon>StaffWindow.xaml</DependentUpon>
     </Compile>
@@ -315,6 +318,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RolesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StaffEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

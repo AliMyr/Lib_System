@@ -17,14 +17,48 @@ namespace Lib_System.Services
             c.Open();
             return c.Query<Staff>(
                 @"SELECT 
-                    id, 
+                    id AS Id, 
                     last_name AS LastName, 
                     first_name AS FirstName, 
                     middle_name AS MiddleName, 
                     role_id AS RoleId, 
                     hired_date AS HiredDate, 
-                    phone 
+                    phone AS Phone 
                   FROM MA_staff");
+        }
+
+        public int CreateStaff(Staff s)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.ExecuteScalar<int>(
+                @"INSERT INTO MA_staff 
+                    (last_name, first_name, middle_name, role_id, hired_date, phone)
+                  VALUES 
+                    (@LastName,@FirstName,@MiddleName,@RoleId,@HiredDate,@Phone);
+                  SELECT LAST_INSERT_ID();", s);
+        }
+
+        public bool UpdateStaff(Staff s)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Execute(
+                @"UPDATE MA_staff SET
+                    last_name=@LastName,
+                    first_name=@FirstName,
+                    middle_name=@MiddleName,
+                    role_id=@RoleId,
+                    hired_date=@HiredDate,
+                    phone=@Phone
+                  WHERE id=@Id", s) > 0;
+        }
+
+        public bool DeleteStaff(int id)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Execute("DELETE FROM MA_staff WHERE id=@Id", new { Id = id }) > 0;
         }
     }
 }
