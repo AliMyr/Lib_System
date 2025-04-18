@@ -1,0 +1,14 @@
+﻿<Window x:Class="Lib_System.Views.LogSessionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Session Log" Height="350" Width="800">
+    <DataGrid x:Name="SessionsGrid" AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="ID"         Binding="{Binding Id}"        Width="Auto"/>
+            <DataGridTextColumn Header="User ID"    Binding="{Binding UserId}"    Width="Auto"/>
+            <DataGridTextColumn Header="Token"      Binding="{Binding Token}"     Width="*"/>
+            <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt}" Width="Auto"/>
+            <DataGridTextColumn Header="Expires At" Binding="{Binding ExpiresAt}" Width="Auto"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

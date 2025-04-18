@@ -118,6 +118,8 @@
     <Compile Include="Models\BookLoan.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Language.cs" />
+    <Compile Include="Models\LogAudit.cs" />
+    <Compile Include="Models\LogSession.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\Reader.cs" />
     <Compile Include="Models\ReadingRoom.cs" />
@@ -142,6 +144,10 @@
     <Compile Include="Services\Interfaces\GenreService\IGenreService.cs" />
     <Compile Include="Services\Interfaces\LanguageService\ILanguageService.cs" />
     <Compile Include="Services\Interfaces\LanguageService\LanguageService.cs" />
+    <Compile Include="Services\Interfaces\LogAuditService\ILogAuditService.cs" />
+    <Compile Include="Services\Interfaces\LogAuditService\LogAuditService.cs" />
+    <Compile Include="Services\Interfaces\LogSessionService\ILogSessionService.cs" />
+    <Compile Include="Services\Interfaces\LogSessionService\LogSessionService.cs" />
     <Compile Include="Services\Interfaces\PasswordHasher\IPasswordHasher.cs" />
     <Compile Include="Services\Interfaces\PasswordHasher\PasswordHasher.cs" />
     <Compile Include="Services\Interfaces\PublisherService\IPublisherService.cs" />
@@ -177,8 +183,14 @@
     <Compile Include="Views\LanguagesWindow.xaml.cs">
       <DependentUpon>LanguagesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LogAuditWindow.xaml.cs">
+      <DependentUpon>LogAuditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogSessionsWindow.xaml.cs">
+      <DependentUpon>LogSessionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PublishersWindow.xaml.cs">
       <DependentUpon>PublishersWindow.xaml</DependentUpon>
@@ -218,6 +230,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LanguagesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogAuditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogSessionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

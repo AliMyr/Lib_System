@@ -46,5 +46,11 @@ namespace Lib_System
         private void ShowStaff_Click(object sender, RoutedEventArgs e)
             => new Views.StaffWindow().Show();
 
+        private void ShowAudit_Click(object sender, RoutedEventArgs e)
+            => new Views.LogAuditWindow().Show();
+
+        private void ShowSessions_Click(object sender, RoutedEventArgs e)
+            => new Views.LogSessionsWindow().Show();
+
     }
 }
