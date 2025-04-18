@@ -183,6 +183,9 @@
     <Compile Include="Views\LanguagesWindow.xaml.cs">
       <DependentUpon>LanguagesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LogAuditEditWindow.xaml.cs">
+      <DependentUpon>LogAuditEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogAuditWindow.xaml.cs">
       <DependentUpon>LogAuditWindow.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LanguagesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogAuditEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
