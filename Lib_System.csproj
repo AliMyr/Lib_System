@@ -156,6 +156,9 @@
     <Compile Include="Services\Interfaces\RoleService\RoleService.cs" />
     <Compile Include="Services\Interfaces\StaffService\IStaffService.cs" />
     <Compile Include="Services\Interfaces\StaffService\StaffService.cs" />
+    <Compile Include="Views\AuthorBookEditWindow.xaml.cs">
+      <DependentUpon>AuthorBookEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AuthorBookWindow.xaml.cs">
       <DependentUpon>AuthorBookWindow.xaml</DependentUpon>
     </Compile>
@@ -225,6 +228,10 @@
     <Compile Include="Views\StaffWindow.xaml.cs">
       <DependentUpon>StaffWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\AuthorBookEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AuthorBookWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
