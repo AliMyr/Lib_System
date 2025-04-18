@@ -14,6 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -111,10 +112,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Author.cs" />
+    <Compile Include="Models\Book.cs" />
     <Compile Include="Services\Interfaces\AuthorService\AuthorService.cs" />
     <Compile Include="Services\Interfaces\AuthorService\IAuthorService.cs" />
     <Compile Include="Services\Interfaces\AuthService\AuthService.cs" />
     <Compile Include="Services\Interfaces\AuthService\IAuthService.cs" />
+    <Compile Include="Services\Interfaces\BookService\BookService.cs" />
+    <Compile Include="Services\Interfaces\BookService\IBookService.cs" />
     <Compile Include="Services\Interfaces\DbService\DbService.cs" />
     <Compile Include="Services\Interfaces\DbService\IDbService.cs" />
     <Compile Include="Services\Interfaces\PasswordHasher\IPasswordHasher.cs" />
@@ -122,13 +126,16 @@
     <Compile Include="Views\AuthorsWindow.xaml.cs">
       <DependentUpon>AuthorsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BooksWindow.xaml.cs">
+      <DependentUpon>BooksWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -136,11 +143,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\AuthorsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BooksWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Lib_System.Views;
 namespace Lib_System
 {
     public partial class MainWindow : Window
@@ -9,5 +10,7 @@ namespace Lib_System
         {
             new Views.AuthorsWindow().Show();
         }
+        private void ShowBooks_Click(object sender, RoutedEventArgs e)
+            => new BooksWindow().Show();
     }
 }
