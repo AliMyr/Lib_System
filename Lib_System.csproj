@@ -148,6 +148,8 @@
     <Compile Include="Services\Interfaces\LogAuditService\LogAuditService.cs" />
     <Compile Include="Services\Interfaces\LogSessionService\ILogSessionService.cs" />
     <Compile Include="Services\Interfaces\LogSessionService\LogSessionService.cs" />
+    <Compile Include="Services\Interfaces\LogUserService\ILogUserService.cs" />
+    <Compile Include="Services\Interfaces\LogUserService\LogUserService.cs" />
     <Compile Include="Services\Interfaces\PasswordHasher\IPasswordHasher.cs" />
     <Compile Include="Services\Interfaces\PasswordHasher\PasswordHasher.cs" />
     <Compile Include="Services\Interfaces\PublisherService\IPublisherService.cs" />
@@ -218,6 +220,12 @@
     </Compile>
     <Compile Include="Views\StaffWindow.xaml.cs">
       <DependentUpon>StaffWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserEditWindow.xaml.cs">
+      <DependentUpon>UserEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UsersWindow.xaml.cs">
+      <DependentUpon>UsersWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AuthorBookWindow.xaml">
       <SubType>Designer</SubType>
@@ -304,6 +312,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StaffWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UsersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -52,5 +52,9 @@ namespace Lib_System
         private void ShowSessions_Click(object sender, RoutedEventArgs e)
             => new Views.LogSessionsWindow().Show();
 
+        private void ShowUsers_Click(object sender, RoutedEventArgs e)
+            => new Views.UsersWindow().Show();
+
+
     }
 }
