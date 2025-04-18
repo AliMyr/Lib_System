@@ -6,6 +6,7 @@
         <StackPanel>
             <Button Content="Show Authors" Width="120" Height="30" Click="ShowAuthors_Click"/>
             <Button Content="Show Books" Width="120" Height="30" Margin="0,5,0,0" Click="ShowBooks_Click"/>
+            <Button Content="Show Readers" Width="120" Height="30" Margin="0,5,0,0" Click="ShowReaders_Click"/>
             <TextBlock Text="Welcome. Now get to work!" FontSize="20" Margin="0,20,0,0" HorizontalAlignment="Center"/>
         </StackPanel>
     </Grid>
