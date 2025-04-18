@@ -13,8 +13,21 @@ namespace Lib_System.Views
         {
             InitializeComponent();
             _svc = svc;
-            Author = author ?? new Author();
-            DataContext = Author;
+            Author = author != null
+                ? new Author
+                {
+                    Id = author.Id,
+                    LastName = author.LastName,
+                    FirstName = author.FirstName,
+                    MiddleName = author.MiddleName,
+                    PenName = author.PenName
+                }
+                : new Author();
+
+            LastNameBox.Text = Author.LastName;
+            FirstNameBox.Text = Author.FirstName;
+            MiddleNameBox.Text = Author.MiddleName;
+            PenNameBox.Text = Author.PenName;
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
@@ -28,10 +41,12 @@ namespace Lib_System.Views
                 Author.Id = _svc.CreateAuthor(Author);
             else
                 _svc.UpdateAuthor(Author);
+
             DialogResult = true;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
             => DialogResult = false;
     }
+
 }
