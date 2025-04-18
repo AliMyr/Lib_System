@@ -213,6 +213,9 @@
     <Compile Include="Views\ReadersWindow.xaml.cs">
       <DependentUpon>ReadersWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ReadingRoomEditWindow.xaml.cs">
+      <DependentUpon>ReadingRoomEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReadingRoomsWindow.xaml.cs">
       <DependentUpon>ReadingRoomsWindow.xaml</DependentUpon>
     </Compile>
@@ -319,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReadersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReadingRoomEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
