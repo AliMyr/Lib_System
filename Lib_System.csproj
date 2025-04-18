@@ -192,6 +192,9 @@
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LogSessionEditWindow.xaml.cs">
+      <DependentUpon>LogSessionEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogSessionsWindow.xaml.cs">
       <DependentUpon>LogSessionsWindow.xaml</DependentUpon>
     </Compile>
@@ -241,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LogAuditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogSessionEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
