@@ -1,0 +1,11 @@
+﻿<Window x:Class="Lib_System.Views.GenresWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Genres" Height="300" Width="400">
+    <DataGrid x:Name="GenresGrid" AutoGenerateColumns="False" IsReadOnly="True" Margin="10">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

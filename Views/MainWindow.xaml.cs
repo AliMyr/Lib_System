@@ -15,5 +15,15 @@ namespace Lib_System
 
         private void ShowReaders_Click(object sender, RoutedEventArgs e)
             => new ReadersWindow().Show();
+
+        private void ShowGenres_Click(object sender, RoutedEventArgs e)
+            => new GenresWindow().Show();
+
+        private void ShowLanguages_Click(object sender, RoutedEventArgs e)
+            => new LanguagesWindow().Show();
+
+        private void ShowPublishers_Click(object sender, RoutedEventArgs e)
+            => new PublishersWindow().Show();
+
     }
 }
