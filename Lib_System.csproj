@@ -213,6 +213,9 @@
     <Compile Include="Views\ReservationsWindow.xaml.cs">
       <DependentUpon>ReservationsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RoleEditWindow.xaml.cs">
+      <DependentUpon>RoleEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RolesWindow.xaml.cs">
       <DependentUpon>RolesWindow.xaml</DependentUpon>
     </Compile>
@@ -304,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReservationsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoleEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

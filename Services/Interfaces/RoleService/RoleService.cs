@@ -15,7 +15,30 @@ namespace Lib_System.Services
         {
             using IDbConnection c = _db.GetConnection();
             c.Open();
-            return c.Query<Role>("SELECT id, title AS Title FROM MA_roles");
+            return c.Query<Role>("SELECT id AS Id, title AS Title FROM MA_roles");
+        }
+
+        public int CreateRole(Role r)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.ExecuteScalar<int>(
+                @"INSERT INTO MA_roles (title) VALUES (@Title);
+                  SELECT LAST_INSERT_ID();", r);
+        }
+
+        public bool UpdateRole(Role r)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Execute("UPDATE MA_roles SET title=@Title WHERE id=@Id", r) > 0;
+        }
+
+        public bool DeleteRole(int id)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Execute("DELETE FROM MA_roles WHERE id=@Id", new { Id = id }) > 0;
         }
     }
 }
