@@ -177,6 +177,9 @@
     <Compile Include="Views\BooksWindow.xaml.cs">
       <DependentUpon>BooksWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GenreEditWindow.xaml.cs">
+      <DependentUpon>GenreEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GenresWindow.xaml.cs">
       <DependentUpon>GenresWindow.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BookLoansWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GenreEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
