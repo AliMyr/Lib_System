@@ -183,6 +183,9 @@
     <Compile Include="Views\GenresWindow.xaml.cs">
       <DependentUpon>GenresWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LanguageEditWindow.xaml.cs">
+      <DependentUpon>LanguageEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LanguagesWindow.xaml.cs">
       <DependentUpon>LanguagesWindow.xaml</DependentUpon>
     </Compile>
@@ -241,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GenresWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LanguageEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
