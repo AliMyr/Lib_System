@@ -3,20 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Books" Height="450" Width="800">
     <DockPanel Margin="10">
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,10">
-            <Button Content="Add" Width="80" Margin="0,0,5,0" Click="Add_Click"/>
-            <Button Content="Edit" Width="80" Margin="0,0,5,0" Click="Edit_Click"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox x:Name="FilterBox" Width="200" Margin="0,0,10,0"
+               TextChanged="FilterBox_TextChanged"/>
+            <Button Content="Add"    Width="80" Click="Add_Click" Margin="0,0,5,0"/>
+            <Button Content="Edit"   Width="80" Click="Edit_Click" Margin="0,0,5,0"/>
             <Button Content="Delete" Width="80" Click="Delete_Click"/>
         </StackPanel>
-        <DataGrid x:Name="BooksGrid" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="BooksGrid"
+              AutoGenerateColumns="False"
+              IsReadOnly="True"
+              CanUserSortColumns="True"
+              CanUserReorderColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"         Binding="{Binding Id}"              Width="Auto"/>
-                <DataGridTextColumn Header="Title"      Binding="{Binding Title}"           Width="*"/>
-                <DataGridTextColumn Header="Publisher"  Binding="{Binding PublisherId}"     Width="Auto"/>
-                <DataGridTextColumn Header="Date"       Binding="{Binding PublicationDate}" Width="Auto"/>
-                <DataGridTextColumn Header="Pages"      Binding="{Binding Pages}"           Width="Auto"/>
-                <DataGridTextColumn Header="Genre"      Binding="{Binding GenreId}"         Width="Auto"/>
-                <DataGridTextColumn Header="Language"   Binding="{Binding LanguageId}"      Width="Auto"/>
+                <DataGridTextColumn Header="ID"
+                            Binding="{Binding Id}"
+                            Width="Auto"/>
+                <DataGridTextColumn Header="Title"
+                            Binding="{Binding Title}"
+                            Width="2*"/>
+                <DataGridTextColumn Header="Publisher"
+                            Binding="{Binding PublisherName}"
+                            Width="*"/>
+                <DataGridTextColumn Header="Genre"
+                            Binding="{Binding GenreTitle}"
+                            Width="*"/>
+                <DataGridTextColumn Header="Language"
+                            Binding="{Binding LanguageTitle}"
+                            Width="*"/>
+                <DataGridTextColumn Header="Pub. Date"
+                            Binding="{Binding PublicationDate, StringFormat=\{0:yyyy-MM-dd\}}"
+                            Width="Auto"/>
+                <DataGridTextColumn Header="Pages"
+                            Binding="{Binding Pages}"
+                            Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
