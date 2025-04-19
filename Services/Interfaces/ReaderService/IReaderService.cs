@@ -5,9 +5,11 @@ namespace Lib_System.Services.Interfaces
 {
     public interface IReaderService
     {
+        IEnumerable<ReaderViewModel> GetAllReaderDetails();
         IEnumerable<Reader> GetAllReaders();
-        int CreateReader(Reader reader);
-        bool UpdateReader(Reader reader);
+        Reader GetReaderById(int id);
+        int CreateReader(Reader r);
+        bool UpdateReader(Reader r);
         bool DeleteReader(int id);
     }
 }
