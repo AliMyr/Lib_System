@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using Lib_System.Models;
+﻿using Lib_System.Models;
+using System.Collections.Generic;
 
-namespace Lib_System.Services.Interfaces
+public interface IPublisherService
 {
-    public interface IPublisherService
-    {
-        IEnumerable<Publisher> GetAllPublishers();
-        int CreatePublisher(Publisher publisher);
-        bool UpdatePublisher(Publisher publisher);
-        bool DeletePublisher(int id);
-    }
+    IEnumerable<PublisherViewModel> GetAllPublisherDetails();
+    Publisher GetPublisherById(int id);
+    int CreatePublisher(Publisher p);
+    bool UpdatePublisher(Publisher p);
+    bool DeletePublisher(int id);
 }

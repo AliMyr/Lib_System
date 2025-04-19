@@ -11,12 +11,22 @@ namespace Lib_System.Services
         private readonly IDbService _db;
         public PublisherService(IDbService db) => _db = db;
 
-        public IEnumerable<Publisher> GetAllPublishers()
+        public Publisher GetPublisherById(int id)
         {
-            using IDbConnection c = _db.GetConnection();
+            using var c = _db.GetConnection();
             c.Open();
-            return c.Query<Publisher>(
-                "SELECT id AS Id, title AS Title, country AS Country FROM MA_publishers");
+            return c.QuerySingle<Publisher>(
+                "SELECT id AS Id, title AS Title, country AS Country FROM MA_publishers WHERE id=@Id",
+                new { Id = id });
+        }
+
+        public IEnumerable<PublisherViewModel> GetAllPublisherDetails()
+        {
+            using var c = _db.GetConnection();
+            c.Open();
+            return c.Query<PublisherViewModel>(
+                @"SELECT id AS Id, title AS Title, country AS Country
+                    FROM MA_publishers");
         }
 
         public int CreatePublisher(Publisher p)

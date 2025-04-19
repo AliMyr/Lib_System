@@ -3,15 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Publishers" Height="400" Width="600">
     <DockPanel Margin="10">
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,10">
-            <Button Content="Add" Width="80" Margin="0,0,5,0" Click="Add_Click"/>
-            <Button Content="Edit" Width="80" Margin="0,0,5,0" Click="Edit_Click"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox x:Name="FilterBox" Width="200" Margin="0,0,10,0"
+               TextChanged="FilterBox_TextChanged"/>
+            <Button Content="Add"    Width="80" Click="Add_Click" Margin="0,0,5,0"/>
+            <Button Content="Edit"   Width="80" Click="Edit_Click" Margin="0,0,5,0"/>
             <Button Content="Delete" Width="80" Click="Delete_Click"/>
         </StackPanel>
-        <DataGrid x:Name="PublishersGrid" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid x:Name="Grid" AutoGenerateColumns="False" IsReadOnly="True" CanUserSortColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"      Binding="{Binding Id}"      Width="Auto"/>
-                <DataGridTextColumn Header="Title"   Binding="{Binding Title}"   Width="*"/>
+                <DataGridTextColumn Header="Title"   Binding="{Binding Title}"   Width="2*"/>
                 <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
