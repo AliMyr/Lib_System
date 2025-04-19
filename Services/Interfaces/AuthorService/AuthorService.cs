@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Windows.Controls.Primitives;
 using Dapper;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
@@ -11,12 +12,33 @@ namespace Lib_System.Services
         private readonly IDbService _db;
         public AuthorService(IDbService db) => _db = db;
 
+        public IEnumerable<AuthorViewModel> GetAllAuthorDetails()
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Query<AuthorViewModel>(@"
+                SELECT 
+                  id AS Id,
+                  CONCAT(last_name,' ',first_name,' ',middle_name) AS FullName,
+                  pen_name AS PenName
+                FROM MA_authors");
+        }
+
         public IEnumerable<Author> GetAllAuthors()
         {
             using IDbConnection c = _db.GetConnection();
             c.Open();
-            return c.Query<Author>(
-                "SELECT id AS Id, last_name AS LastName, first_name AS FirstName, middle_name AS MiddleName, pen_name AS PenName FROM MA_authors");
+            return c.Query<Author>("SELECT id AS Id, last_name AS LastName, first_name AS FirstName, middle_name AS MiddleName, pen_name AS PenName FROM MA_authors");
+        }
+
+        public Author GetAuthorById(int id)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.QuerySingle<Author>(@"
+                SELECT id AS Id, last_name AS LastName, first_name AS FirstName, middle_name AS MiddleName, pen_name AS PenName
+                FROM MA_authors
+                WHERE id = @Id", new { Id = id });
         }
 
         public int CreateAuthor(Author author)
