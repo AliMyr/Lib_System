@@ -7,25 +7,25 @@ namespace Lib_System.Views
     public partial class LanguageEditWindow : Window
     {
         private readonly ILanguageService _svc;
-        public Language Language { get; private set; }
+        public Language CurrentLanguage { get; private set; }
 
         public LanguageEditWindow(ILanguageService svc, Language lang = null)
         {
             InitializeComponent();
             _svc = svc;
-            Language = lang != null
+            CurrentLanguage = lang != null
                 ? new Language { Id = lang.Id, Title = lang.Title }
                 : new Language();
-            TitleBox.Text = Language.Title;
+            TitleBox.Text = CurrentLanguage.Title;
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
-            Language.Title = TitleBox.Text.Trim();
-            if (Language.Id == 0)
-                Language.Id = _svc.CreateLanguage(Language);
+            CurrentLanguage.Title = TitleBox.Text.Trim();
+            if (CurrentLanguage.Id == 0)
+                CurrentLanguage.Id = _svc.CreateLanguage(CurrentLanguage);
             else
-                _svc.UpdateLanguage(Language);
+                _svc.UpdateLanguage(CurrentLanguage);
             DialogResult = true;
         }
 
