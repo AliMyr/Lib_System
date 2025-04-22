@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using Lib_System.Models;
 using Lib_System.Services;
@@ -11,43 +12,65 @@ namespace Lib_System.Views
     {
         private readonly IAuthorService _svc;
         private readonly CollectionView _view;
+        private readonly System.Collections.Generic.IList<AuthorViewModel> _list;
 
         public AuthorsWindow()
         {
             InitializeComponent();
             _svc = new AuthorService(new DbService());
-            RefreshGrid();
-            _view = (CollectionView)CollectionViewSource.GetDefaultView(AuthorsGrid.ItemsSource);
+            _list = _svc.GetAllAuthorDetails().ToList();
+            AuthorsGrid.ItemsSource = _list;
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(_list);
+
+            // наполняем комбобоксы фильтров
+            var names = _list
+                .Select(x => x.FullName)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            names.Insert(0, string.Empty);
+            NameFilterBox.ItemsSource = names;
+
+            var pens = _list
+                .Select(x => x.PenName ?? string.Empty)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            pens.Insert(0, string.Empty);
+            PenFilterBox.ItemsSource = pens;
         }
 
-        private void RefreshGrid()
-            => AuthorsGrid.ItemsSource = _svc.GetAllAuthorDetails().ToList();
-
-        private void FilterBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void FilterControlChanged(object sender, RoutedEventArgs e)
         {
-            var f = FilterBox.Text.Trim().ToLower();
+            var s = SearchBox.Text.Trim().ToLower();
+            var fn = (NameFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+            var fp = (PenFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+
             _view.Filter = o =>
             {
-                var a = (AuthorViewModel)o;
-                return string.IsNullOrEmpty(f)
-                    || a.FullName.ToLower().Contains(f)
-                    || (a.PenName?.ToLower().Contains(f) ?? false);
+                var vm = (AuthorViewModel)o;
+                var bySearch = string.IsNullOrEmpty(s)
+                    || vm.FullName.ToLower().Contains(s)
+                    || (vm.PenName?.ToLower().Contains(s) ?? false);
+                var byName = string.IsNullOrEmpty(fn) || vm.FullName.ToLower() == fn;
+                var byPen = string.IsNullOrEmpty(fp) || (vm.PenName?.ToLower() == fp);
+                return bySearch && byName && byPen;
             };
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            var win = new AuthorEditWindow(_svc);
-            if (win.ShowDialog() == true) RefreshGrid();
+            if (new AuthorEditWindow(_svc).ShowDialog() == true)
+                Refresh();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if (AuthorsGrid.SelectedItem is AuthorViewModel vm)
             {
-                var a = _svc.GetAuthorById(vm.Id);
-                var win = new AuthorEditWindow(_svc, a);
-                if (win.ShowDialog() == true) RefreshGrid();
+                var model = _svc.GetAuthorById(vm.Id);
+                if (new AuthorEditWindow(_svc, model).ShowDialog() == true)
+                    Refresh();
             }
         }
 
@@ -57,8 +80,16 @@ namespace Lib_System.Views
                 && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _svc.DeleteAuthor(vm.Id);
-                RefreshGrid();
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            _list.Clear();
+            foreach (var x in _svc.GetAllAuthorDetails())
+                _list.Add(x);
+            _view.Refresh();
         }
     }
 }
