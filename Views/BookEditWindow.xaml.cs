@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -8,22 +9,27 @@ namespace Lib_System.Views
     public partial class BookEditWindow : Window
     {
         private readonly IBookService _svc;
+        private readonly IPublisherService _pubSvc;
+        private readonly IGenreService _genreSvc;
+        private readonly ILanguageService _langSvc;
         private readonly Book _model;
 
         public BookEditWindow(IBookService svc, Book model = null)
         {
             InitializeComponent();
             _svc = svc;
+            _pubSvc = new PublisherService(new DbService());
+            _genreSvc = new GenreService(new DbService());
+            _langSvc = new LanguageService(new DbService());
             _model = model ?? new Book();
 
             TitleBox.Text = _model.Title;
             DatePicker.SelectedDate = _model.PublicationDate;
             PagesBox.Text = _model.Pages.ToString();
 
-            var pubs = _svc.GetAllBooks().Select(b => b.PublisherId).Distinct();
-            PubBox.ItemsSource = svc.GetAllBooks().Select(b => b.PublisherId);
-            GenreBox.ItemsSource = svc.GetAllBooks().Select(b => b.GenreId);
-            LangBox.ItemsSource = svc.GetAllBooks().Select(b => b.LanguageId);
+            PubBox.ItemsSource = _pubSvc.GetAllPublisherDetails().ToList();
+            GenreBox.ItemsSource = _genreSvc.GetAllGenreDetails().ToList();
+            LangBox.ItemsSource = _langSvc.GetAllLanguageDetails().ToList();
 
             if (_model.Id != 0)
             {
@@ -51,6 +57,6 @@ namespace Lib_System.Views
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
-             => DialogResult = false;
+            => DialogResult = false;
     }
 }
