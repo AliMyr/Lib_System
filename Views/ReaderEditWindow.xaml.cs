@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
 
@@ -8,46 +8,35 @@ namespace Lib_System.Views
     public partial class ReaderEditWindow : Window
     {
         private readonly IReaderService _svc;
-        public Reader Reader { get; private set; }
+        private readonly Reader _model;
 
-        public ReaderEditWindow(IReaderService svc, Reader reader = null)
+        public ReaderEditWindow(IReaderService svc, Reader model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Reader = reader != null
-                ? new Reader
-                {
-                    Id = reader.Id,
-                    LastName = reader.LastName,
-                    FirstName = reader.FirstName,
-                    MiddleName = reader.MiddleName,
-                    Phone = reader.Phone,
-                    Address = reader.Address,
-                    RegistrationDate = reader.RegistrationDate
-                }
-                : new Reader();
+            _model = model ?? new Reader();
 
-            LastNameBox.Text = Reader.LastName;
-            FirstNameBox.Text = Reader.FirstName;
-            MiddleNameBox.Text = Reader.MiddleName;
-            PhoneBox.Text = Reader.Phone;
-            AddressBox.Text = Reader.Address;
-            RegDateBox.Text = Reader.RegistrationDate?.ToString("yyyy-MM-dd") ?? "";
+            LastBox.Text = _model.LastName;
+            FirstBox.Text = _model.FirstName;
+            MiddleBox.Text = _model.MiddleName;
+            PhoneBox.Text = _model.Phone;
+            AddressBox.Text = _model.Address;
+            DatePicker.SelectedDate = _model.RegistrationDate;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Reader.LastName = LastNameBox.Text.Trim();
-            Reader.FirstName = FirstNameBox.Text.Trim();
-            Reader.MiddleName = MiddleNameBox.Text.Trim();
-            Reader.Phone = PhoneBox.Text.Trim();
-            Reader.Address = AddressBox.Text.Trim();
-            Reader.RegistrationDate = DateTime.TryParse(RegDateBox.Text.Trim(), out var dt) ? dt : (DateTime?)null;
+            _model.LastName = LastBox.Text.Trim();
+            _model.FirstName = FirstBox.Text.Trim();
+            _model.MiddleName = MiddleBox.Text.Trim();
+            _model.Phone = PhoneBox.Text.Trim();
+            _model.Address = AddressBox.Text.Trim();
+            _model.RegistrationDate = DatePicker.SelectedDate;
 
-            if (Reader.Id == 0)
-                Reader.Id = _svc.CreateReader(Reader);
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateReader(_model);
             else
-                _svc.UpdateReader(Reader);
+                _svc.UpdateReader(_model);
 
             DialogResult = true;
         }
