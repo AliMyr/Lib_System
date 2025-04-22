@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Windows;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
@@ -8,51 +8,49 @@ namespace Lib_System.Views
     public partial class BookEditWindow : Window
     {
         private readonly IBookService _svc;
-        public Book Book { get; private set; }
+        private readonly Book _model;
 
-        public BookEditWindow(IBookService svc, Book book = null)
+        public BookEditWindow(IBookService svc, Book model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Book = book != null
-                ? new Book
-                {
-                    Id = book.Id,
-                    Title = book.Title,
-                    PublisherId = book.PublisherId,
-                    PublicationDate = book.PublicationDate,
-                    Pages = book.Pages,
-                    GenreId = book.GenreId,
-                    LanguageId = book.LanguageId
-                }
-                : new Book();
+            _model = model ?? new Book();
 
-            TitleBox.Text = Book.Title;
-            PublisherBox.Text = Book.PublisherId.ToString();
-            DateBox.Text = Book.PublicationDate?.ToString("yyyy-MM-dd") ?? "";
-            PagesBox.Text = Book.Pages.ToString();
-            GenreBox.Text = Book.GenreId.ToString();
-            LangBox.Text = Book.LanguageId.ToString();
+            TitleBox.Text = _model.Title;
+            DatePicker.SelectedDate = _model.PublicationDate;
+            PagesBox.Text = _model.Pages.ToString();
+
+            var pubs = _svc.GetAllBooks().Select(b => b.PublisherId).Distinct();
+            PubBox.ItemsSource = svc.GetAllBooks().Select(b => b.PublisherId);
+            GenreBox.ItemsSource = svc.GetAllBooks().Select(b => b.GenreId);
+            LangBox.ItemsSource = svc.GetAllBooks().Select(b => b.LanguageId);
+
+            if (_model.Id != 0)
+            {
+                PubBox.SelectedValue = _model.PublisherId;
+                GenreBox.SelectedValue = _model.GenreId;
+                LangBox.SelectedValue = _model.LanguageId;
+            }
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Book.Title = TitleBox.Text.Trim();
-            Book.PublisherId = int.Parse(PublisherBox.Text.Trim());
-            Book.PublicationDate = DateTime.TryParse(DateBox.Text.Trim(), out var dt) ? dt : (DateTime?)null;
-            Book.Pages = int.Parse(PagesBox.Text.Trim());
-            Book.GenreId = int.Parse(GenreBox.Text.Trim());
-            Book.LanguageId = int.Parse(LangBox.Text.Trim());
+            _model.Title = TitleBox.Text.Trim();
+            _model.PublicationDate = DatePicker.SelectedDate;
+            _model.Pages = int.Parse(PagesBox.Text);
+            _model.PublisherId = (int)PubBox.SelectedValue;
+            _model.GenreId = (int)GenreBox.SelectedValue;
+            _model.LanguageId = (int)LangBox.SelectedValue;
 
-            if (Book.Id == 0)
-                Book.Id = _svc.CreateBook(Book);
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateBook(_model);
             else
-                _svc.UpdateBook(Book);
+                _svc.UpdateBook(_model);
 
             DialogResult = true;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
-            => DialogResult = false;
+             => DialogResult = false;
     }
 }
