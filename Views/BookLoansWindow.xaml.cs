@@ -12,38 +12,57 @@ namespace Lib_System.Views
     {
         private readonly IBookLoanService _svc;
         private readonly CollectionView _view;
+        private readonly System.Collections.Generic.IList<BookLoanViewModel> _list;
 
         public BookLoansWindow()
         {
             InitializeComponent();
             _svc = new BookLoanService(new DbService());
-            RefreshGrid();
-            _view = (CollectionView)CollectionViewSource.GetDefaultView(LoansGrid.ItemsSource);
+            _list = _svc.GetAllLoanDetails().ToList();
+            LoansGrid.ItemsSource = _list;
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(_list);
+
+            var readers = _list
+                .Select(x => x.ReaderName)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            readers.Insert(0, string.Empty);
+            ReaderFilterBox.ItemsSource = readers;
+
+            var books = _list
+                .Select(x => x.BookTitle)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            books.Insert(0, string.Empty);
+            BookFilterBox.ItemsSource = books;
         }
 
-        private void RefreshGrid()
+        private void FilterControlChanged(object sender, RoutedEventArgs e)
         {
-            var list = _svc.GetAllLoanDetails().ToList();
-            LoansGrid.ItemsSource = list;
-        }
+            var s = SearchBox.Text.Trim().ToLower();
+            var fr = (ReaderFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+            var fb = (BookFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
 
-        private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var f = FilterBox.Text.Trim().ToLower();
             _view.Filter = o =>
             {
-                var loan = (BookLoanViewModel)o;
-                return string.IsNullOrEmpty(f)
-                    || (loan.ReaderName?.ToLower().Contains(f) ?? false)
-                    || (loan.BookTitle?.ToLower().Contains(f) ?? false);
+                var vm = (BookLoanViewModel)o;
+                var bySearch = string.IsNullOrEmpty(s)
+                    || vm.ReaderName.ToLower().Contains(s)
+                    || vm.BookTitle.ToLower().Contains(s);
+                var byReader = string.IsNullOrEmpty(fr)
+                    || vm.ReaderName.ToLower() == fr;
+                var byBook = string.IsNullOrEmpty(fb)
+                    || vm.BookTitle.ToLower() == fb;
+                return bySearch && byReader && byBook;
             };
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            var win = new BookLoanEditWindow(_svc);
-            if (win.ShowDialog() == true)
-                RefreshGrid();
+            if (new BookLoanEditWindow(_svc).ShowDialog() == true)
+                Refresh();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -51,9 +70,8 @@ namespace Lib_System.Views
             if (LoansGrid.SelectedItem is BookLoanViewModel vm)
             {
                 var model = _svc.GetLoanById(vm.Id);
-                var win = new BookLoanEditWindow(_svc, model);
-                if (win.ShowDialog() == true)
-                    RefreshGrid();
+                if (new BookLoanEditWindow(_svc, model).ShowDialog() == true)
+                    Refresh();
             }
         }
 
@@ -63,8 +81,16 @@ namespace Lib_System.Views
                 && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _svc.DeleteLoan(vm.Id);
-                RefreshGrid();
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            _list.Clear();
+            foreach (var x in _svc.GetAllLoanDetails())
+                _list.Add(x);
+            _view.Refresh();
         }
     }
 }
