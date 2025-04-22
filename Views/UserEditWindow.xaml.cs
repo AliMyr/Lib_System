@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -8,39 +9,37 @@ namespace Lib_System.Views
     public partial class UserEditWindow : Window
     {
         private readonly ILogUserService _svc;
-        public LogUser User { get; private set; }
+        private readonly IPasswordHasher _hasher = new PasswordHasher();
+        private readonly LogUser _model;
 
-        public UserEditWindow(ILogUserService svc, LogUser user = null)
+        public UserEditWindow(ILogUserService svc, LogUser model = null)
         {
             InitializeComponent();
             _svc = svc;
-            User = user != null
-                ? new LogUser
-                {
-                    Id = user.Id,
-                    Username = user.Username,
-                    Email = user.Email,
-                    PasswordHash = user.PasswordHash,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt
-                }
-                : new LogUser { CreatedAt = DateTime.Now };
-            UsernameBox.Text = User.Username;
-            EmailBox.Text = User.Email;
-            HashBox.Text = User.PasswordHash;
+            _model = model ?? new LogUser();
+
+            UserBox.Text = _model.Username;
+            EmailBox.Text = _model.Email;
+            CreatedPicker.SelectedDate = _model.CreatedAt;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            User.Username = UsernameBox.Text.Trim();
-            User.Email = EmailBox.Text.Trim();
-            User.PasswordHash = HashBox.Text.Trim();
-            User.UpdatedAt = DateTime.Now;
-            if (User.Id == 0) User.Id = _svc.CreateUser(User);
-            else _svc.UpdateUser(User);
+            _model.Username = UserBox.Text.Trim();
+            _model.Email = EmailBox.Text.Trim();
+            if (!string.IsNullOrEmpty(PassBox.Password))
+                _model.PasswordHash = _hasher.Hash(PassBox.Password);
+            _model.CreatedAt = CreatedPicker.SelectedDate ?? DateTime.Now;
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateUser(_model);
+            else
+                _svc.UpdateUser(_model);
+
             DialogResult = true;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+            => DialogResult = false;
     }
 }
