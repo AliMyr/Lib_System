@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface ILanguageService
     {
-        IEnumerable<Language> GetAllLanguages();
+        IEnumerable<LanguageViewModel> GetAllLanguageDetails();
+        Language GetLanguageById(int id);
         int CreateLanguage(Language lang);
         bool UpdateLanguage(Language lang);
         bool DeleteLanguage(int id);
