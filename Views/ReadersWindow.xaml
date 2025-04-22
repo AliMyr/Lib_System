@@ -5,7 +5,9 @@
     <DockPanel Margin="10">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
             <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <TextBox x:Name="FilterBox" Width="200" Margin="0,0,10,0"
+            <TextBox x:Name="FilterBox"
+               Width="200"
+               Margin="0,0,10,0"
                TextChanged="FilterBox_TextChanged"/>
             <Button Content="Add"    Width="80" Click="Add_Click" Margin="0,0,5,0"/>
             <Button Content="Edit"   Width="80" Click="Edit_Click" Margin="0,0,5,0"/>
@@ -19,7 +21,7 @@
                 <DataGridTextColumn Header="ID"
                             Binding="{Binding Id}"
                             Width="Auto"/>
-                <DataGridTextColumn Header="Full Name"
+                <DataGridTextColumn Header="Name"
                             Binding="{Binding FullName}"
                             Width="2*"/>
                 <DataGridTextColumn Header="Phone"

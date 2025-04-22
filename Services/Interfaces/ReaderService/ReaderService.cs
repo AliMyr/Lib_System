@@ -16,28 +16,12 @@ namespace Lib_System.Services
             using IDbConnection c = _db.GetConnection();
             c.Open();
             return c.Query<ReaderViewModel>(@"
-                SELECT
-                    id            AS Id,
-                    CONCAT(last_name,' ',first_name) AS FullName,
-                    phone         AS Phone,
-                    address       AS Address,
-                    registration_date AS RegistrationDate
-                FROM MA_readers");
-        }
-
-        public IEnumerable<Reader> GetAllReaders()
-        {
-            using IDbConnection c = _db.GetConnection();
-            c.Open();
-            return c.Query<Reader>(@"
-                SELECT
-                    id             AS Id,
-                    last_name      AS LastName,
-                    first_name     AS FirstName,
-                    middle_name    AS MiddleName,
-                    phone          AS Phone,
-                    address        AS Address,
-                    registration_date AS RegistrationDate
+                SELECT 
+                    id                   AS Id,
+                    CONCAT(last_name,' ', first_name) AS FullName,
+                    phone                AS Phone,
+                    address              AS Address,
+                    registration_date    AS RegistrationDate  -- подтягиваем дату
                 FROM MA_readers");
         }
 
@@ -46,16 +30,16 @@ namespace Lib_System.Services
             using IDbConnection c = _db.GetConnection();
             c.Open();
             return c.QuerySingle<Reader>(@"
-                SELECT
-                    id             AS Id,
-                    last_name      AS LastName,
-                    first_name     AS FirstName,
-                    middle_name    AS MiddleName,
-                    phone          AS Phone,
-                    address        AS Address,
+                SELECT 
+                    id               AS Id,
+                    last_name        AS LastName,
+                    first_name       AS FirstName,
+                    middle_name      AS MiddleName,
+                    phone            AS Phone,
+                    address          AS Address,
                     registration_date AS RegistrationDate
                 FROM MA_readers
-                WHERE id=@Id", new { Id = id });
+                WHERE id = @Id", new { Id = id });
         }
 
         public int CreateReader(Reader r)

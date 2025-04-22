@@ -6,5 +6,5 @@ public class ReaderViewModel
     public string FullName { get; set; }
     public string Phone { get; set; }
     public string Address { get; set; }
-    public DateTime? RegDate { get; set; }
+    public DateTime? RegistrationDate { get; set; }
 }
