@@ -25,6 +25,18 @@ namespace Lib_System.Services
                 LEFT JOIN MA_reading_rooms  rr  ON bc.reading_rooms_id = rr.id");
         }
 
+        public IEnumerable<BookCopy> GetAllCopies()
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Query<BookCopy>(@"
+            SELECT 
+              id             AS Id,
+              book_id        AS BookId,
+              reading_rooms_id AS ReadingRoomsId
+            FROM MA_book_copies");
+        }
+
         public BookCopy GetCopyById(int id)
         {
             using IDbConnection c = _db.GetConnection();
