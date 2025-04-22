@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -7,27 +9,36 @@ namespace Lib_System.Views
     public partial class AuthorBookEditWindow : Window
     {
         private readonly IAuthorBookService _svc;
-        public AuthorBook Relation { get; private set; }
+        private readonly AuthorBook _model;
 
-        public AuthorBookEditWindow(IAuthorBookService svc, AuthorBook rel = null)
+        public AuthorBookEditWindow(IAuthorBookService svc, AuthorBook model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Relation = rel != null
-                ? new AuthorBook { Id = rel.Id, AuthorId = rel.AuthorId, BookId = rel.BookId }
-                : new AuthorBook();
-            AuthorBox.Text = Relation.AuthorId.ToString();
-            BookBox.Text = Relation.BookId.ToString();
+            _model = model ?? new AuthorBook();
+
+            var authors = new AuthorService(new DbService()).GetAllAuthors().ToList();
+            AuthorBox.ItemsSource = authors;
+            var books = new BookService(new DbService()).GetAllBooks().ToList();
+            BookBox.ItemsSource = books;
+
+            if (_model.Id != 0)
+            {
+                AuthorBox.SelectedValue = _model.AuthorId;
+                BookBox.SelectedValue = _model.BookId;
+            }
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Relation.AuthorId = int.Parse(AuthorBox.Text.Trim());
-            Relation.BookId = int.Parse(BookBox.Text.Trim());
-            if (Relation.Id == 0)
-                Relation.Id = _svc.CreateRelation(Relation);
+            _model.AuthorId = (int)AuthorBox.SelectedValue;
+            _model.BookId = (int)BookBox.SelectedValue;
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateRelation(_model);
             else
-                _svc.UpdateRelation(Relation);
+                _svc.UpdateRelation(_model);
+
             DialogResult = true;
         }
 
