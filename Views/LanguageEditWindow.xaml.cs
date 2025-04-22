@@ -7,25 +7,26 @@ namespace Lib_System.Views
     public partial class LanguageEditWindow : Window
     {
         private readonly ILanguageService _svc;
-        public Language CurrentLanguage { get; private set; }
+        private readonly Language _model;
 
-        public LanguageEditWindow(ILanguageService svc, Language lang = null)
+        public LanguageEditWindow(ILanguageService svc, Language model = null)
         {
             InitializeComponent();
             _svc = svc;
-            CurrentLanguage = lang != null
-                ? new Language { Id = lang.Id, Title = lang.Title }
-                : new Language();
-            TitleBox.Text = CurrentLanguage.Title;
+            _model = model ?? new Language();
+
+            TitleBox.Text = _model.Title;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            CurrentLanguage.Title = TitleBox.Text.Trim();
-            if (CurrentLanguage.Id == 0)
-                CurrentLanguage.Id = _svc.CreateLanguage(CurrentLanguage);
+            _model.Title = TitleBox.Text.Trim();
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateLanguage(_model);
             else
-                _svc.UpdateLanguage(CurrentLanguage);
+                _svc.UpdateLanguage(_model);
+
             DialogResult = true;
         }
 
