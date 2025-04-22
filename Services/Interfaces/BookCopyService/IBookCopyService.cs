@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface IBookCopyService
     {
-        IEnumerable<BookCopy> GetAllCopies();
+        IEnumerable<BookCopyViewModel> GetAllCopyDetails();
+        BookCopy GetCopyById(int id);
         int CreateCopy(BookCopy copy);
         bool UpdateCopy(BookCopy copy);
         bool DeleteCopy(int id);
