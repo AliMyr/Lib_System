@@ -1,6 +1,7 @@
-﻿using System;
+﻿using System.Linq;
 using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -8,39 +9,51 @@ namespace Lib_System.Views
     public partial class BookLoanEditWindow : Window
     {
         private readonly IBookLoanService _svc;
-        public BookLoan Loan { get; private set; }
+        private readonly IReaderService _rSvc;
+        private readonly IBookCopyService _cSvc;
+        private readonly BookLoan _model;
 
-        public BookLoanEditWindow(IBookLoanService svc, BookLoan loan = null)
+        public BookLoanEditWindow(
+            IBookLoanService svc,
+            BookLoan model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Loan = loan != null
-                ? new BookLoan
-                {
-                    Id = loan.Id,
-                    ReaderId = loan.ReaderId,
-                    BookCopiesId = loan.BookCopiesId,
-                    LoanDate = loan.LoanDate,
-                    ReturnDate = loan.ReturnDate
-                }
-                : new BookLoan();
-            ReaderBox.Text = Loan.ReaderId.ToString();
-            CopyBox.Text = Loan.BookCopiesId.ToString();
-            LoanDateBox.Text = Loan.LoanDate?.ToString("yyyy-MM-dd") ?? "";
-            ReturnDateBox.Text = Loan.ReturnDate?.ToString("yyyy-MM-dd") ?? "";
+            _rSvc = new ReaderService(new DbService());
+            _cSvc = new BookCopyService(new DbService());
+            _model = model ?? new BookLoan();
+
+            var readers = _rSvc.GetAllReaderDetails().ToList();
+            ReaderBox.ItemsSource = readers;
+
+            var copies = _cSvc.GetAllCopyDetails().ToList();
+            CopyBox.ItemsSource = copies;
+
+            if (_model.Id != 0)
+            {
+                ReaderBox.SelectedValue = _model.ReaderId;
+                CopyBox.SelectedValue = _model.BookCopiesId;
+                LoanDatePicker.SelectedDate = _model.LoanDate;
+                ReturnDatePicker.SelectedDate = _model.ReturnDate;
+            }
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Loan.ReaderId = int.Parse(ReaderBox.Text.Trim());
-            Loan.BookCopiesId = int.Parse(CopyBox.Text.Trim());
-            Loan.LoanDate = DateTime.TryParse(LoanDateBox.Text.Trim(), out var ld) ? ld : (DateTime?)null;
-            Loan.ReturnDate = DateTime.TryParse(ReturnDateBox.Text.Trim(), out var rd) ? rd : (DateTime?)null;
-            if (Loan.Id == 0) Loan.Id = _svc.CreateLoan(Loan);
-            else _svc.UpdateLoan(Loan);
+            _model.ReaderId = (int)ReaderBox.SelectedValue;
+            _model.BookCopiesId = (int)CopyBox.SelectedValue;
+            _model.LoanDate = LoanDatePicker.SelectedDate;
+            _model.ReturnDate = ReturnDatePicker.SelectedDate;
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateLoan(_model);
+            else
+                _svc.UpdateLoan(_model);
+
             DialogResult = true;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+            => DialogResult = false;
     }
 }
