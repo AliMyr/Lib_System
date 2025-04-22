@@ -7,27 +7,28 @@ namespace Lib_System.Views
     public partial class PublisherEditWindow : Window
     {
         private readonly IPublisherService _svc;
-        public Publisher Pub { get; private set; }
+        private readonly Publisher _model;
 
-        public PublisherEditWindow(IPublisherService svc, Publisher pub = null)
+        public PublisherEditWindow(IPublisherService svc, Publisher model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Pub = pub != null
-                ? new Publisher { Id = pub.Id, Title = pub.Title, Country = pub.Country }
-                : new Publisher();
-            TitleBox.Text = Pub.Title;
-            CountryBox.Text = Pub.Country;
+            _model = model ?? new Publisher();
+
+            TitleBox.Text = _model.Title;
+            CountryBox.Text = _model.Country;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Pub.Title = TitleBox.Text.Trim();
-            Pub.Country = CountryBox.Text.Trim();
-            if (Pub.Id == 0)
-                Pub.Id = _svc.CreatePublisher(Pub);
+            _model.Title = TitleBox.Text.Trim();
+            _model.Country = CountryBox.Text.Trim();
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreatePublisher(_model);
             else
-                _svc.UpdatePublisher(Pub);
+                _svc.UpdatePublisher(_model);
+
             DialogResult = true;
         }
 
