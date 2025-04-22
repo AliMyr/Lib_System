@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
 
@@ -7,40 +8,31 @@ namespace Lib_System.Views
     public partial class AuthorEditWindow : Window
     {
         private readonly IAuthorService _svc;
-        public Author Author { get; private set; }
+        private readonly Author _model;
 
-        public AuthorEditWindow(IAuthorService svc, Author author = null)
+        public AuthorEditWindow(IAuthorService svc, Author model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Author = author != null
-                ? new Author
-                {
-                    Id = author.Id,
-                    LastName = author.LastName,
-                    FirstName = author.FirstName,
-                    MiddleName = author.MiddleName,
-                    PenName = author.PenName
-                }
-                : new Author();
+            _model = model ?? new Author();
 
-            LastNameBox.Text = Author.LastName;
-            FirstNameBox.Text = Author.FirstName;
-            MiddleNameBox.Text = Author.MiddleName;
-            PenNameBox.Text = Author.PenName;
+            LastBox.Text = _model.LastName;
+            FirstBox.Text = _model.FirstName;
+            MiddleBox.Text = _model.MiddleName;
+            PenBox.Text = _model.PenName;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Author.LastName = LastNameBox.Text.Trim();
-            Author.FirstName = FirstNameBox.Text.Trim();
-            Author.MiddleName = MiddleNameBox.Text.Trim();
-            Author.PenName = PenNameBox.Text.Trim();
+            _model.LastName = LastBox.Text.Trim();
+            _model.FirstName = FirstBox.Text.Trim();
+            _model.MiddleName = MiddleBox.Text.Trim();
+            _model.PenName = PenBox.Text.Trim();
 
-            if (Author.Id == 0)
-                Author.Id = _svc.CreateAuthor(Author);
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateAuthor(_model);
             else
-                _svc.UpdateAuthor(Author);
+                _svc.UpdateAuthor(_model);
 
             DialogResult = true;
         }
@@ -48,5 +40,4 @@ namespace Lib_System.Views
         private void Cancel_Click(object sender, RoutedEventArgs e)
             => DialogResult = false;
     }
-
 }
