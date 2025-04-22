@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -7,41 +9,51 @@ namespace Lib_System.Views
     public partial class ReadingRoomEditWindow : Window
     {
         private readonly IReadingRoomService _svc;
-        public ReadingRoom Room { get; private set; }
+        private readonly IStaffService _staffSvc;
+        private readonly ReadingRoom _model;
 
-        public ReadingRoomEditWindow(IReadingRoomService svc, ReadingRoom room = null)
+        public ReadingRoomEditWindow(
+            IReadingRoomService svc,
+            ReadingRoom model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Room = room != null
-                ? new ReadingRoom
-                {
-                    Id = room.Id,
-                    Title = room.Title,
-                    Floor = room.Floor,
-                    Capacity = room.Capacity,
-                    HasWiFi = room.HasWiFi,
-                    StaffId = room.StaffId
-                }
-                : new ReadingRoom();
-            TitleBox.Text = Room.Title;
-            FloorBox.Text = Room.Floor?.ToString() ?? "";
-            CapacityBox.Text = Room.Capacity?.ToString() ?? "";
-            HasWiFiBox.IsChecked = Room.HasWiFi == true;
-            StaffBox.Text = Room.StaffId?.ToString() ?? "";
+            _staffSvc = new StaffService(new DbService());
+            _model = model ?? new ReadingRoom();
+
+            TitleBox.Text = _model.Title;
+            FloorBox.Text = _model.Floor?.ToString();
+            CapBox.Text = _model.Capacity?.ToString();
+            WifiBox.IsChecked = _model.HasWiFi;
+
+            var staff = _staffSvc.GetAllStaffDetails().ToList();
+            StaffBox.ItemsSource = staff;
+            if (_model.StaffId.HasValue)
+                StaffBox.SelectedValue = _model.StaffId.Value;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Room.Title = TitleBox.Text.Trim();
-            Room.Floor = int.TryParse(FloorBox.Text.Trim(), out var f) ? f : (int?)null;
-            Room.Capacity = int.TryParse(CapacityBox.Text.Trim(), out var c) ? c : (int?)null;
-            Room.HasWiFi = HasWiFiBox.IsChecked == true;
-            Room.StaffId = int.TryParse(StaffBox.Text.Trim(), out var s) ? s : (int?)null;
-            if (Room.Id == 0)
-                Room.Id = _svc.CreateRoom(Room);
+            _model.Title = TitleBox.Text.Trim();
+
+            if (int.TryParse(FloorBox.Text, out var f))
+                _model.Floor = f;
             else
-                _svc.UpdateRoom(Room);
+                _model.Floor = null;
+
+            if (int.TryParse(CapBox.Text, out var c))
+                _model.Capacity = c;
+            else
+                _model.Capacity = null;
+
+            _model.HasWiFi = WifiBox.IsChecked == true;
+            _model.StaffId = StaffBox.SelectedValue as int?;
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateRoom(_model);
+            else
+                _svc.UpdateRoom(_model);
+
             DialogResult = true;
         }
 
