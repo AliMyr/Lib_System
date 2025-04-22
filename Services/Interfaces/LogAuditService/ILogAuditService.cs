@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface ILogAuditService
     {
-        IEnumerable<LogAudit> GetAllAudits();
+        IEnumerable<LogAuditViewModel> GetAllAuditDetails();
+        LogAudit GetAuditById(ulong id);
         ulong CreateAudit(LogAudit audit);
         bool UpdateAudit(LogAudit audit);
         bool DeleteAudit(ulong id);
