@@ -12,41 +12,65 @@ namespace Lib_System.Views
     {
         private readonly IBookCopyService _svc;
         private readonly CollectionView _view;
+        private readonly System.Collections.Generic.IList<BookCopyViewModel> _list;
 
         public BookCopiesWindow()
         {
             InitializeComponent();
             _svc = new BookCopyService(new DbService());
-            RefreshGrid();
-            _view = (CollectionView)CollectionViewSource.GetDefaultView(CopiesGrid.ItemsSource);
+            _list = _svc.GetAllCopyDetails().ToList();
+            CopiesGrid.ItemsSource = _list;
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(_list);
+
+            // заполнить фильтры
+            var books = _list
+                .Select(x => x.BookTitle)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            books.Insert(0, string.Empty);
+            BookFilterBox.ItemsSource = books;
+
+            var rooms = _list
+                .Select(x => x.ReadingRoomName)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            rooms.Insert(0, string.Empty);
+            RoomFilterBox.ItemsSource = rooms;
         }
 
-        private void RefreshGrid()
-            => CopiesGrid.ItemsSource = _svc.GetAllCopyDetails().ToList();
-
-        private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void FilterControlChanged(object sender, RoutedEventArgs e)
         {
-            var f = FilterBox.Text.Trim().ToLower();
+            var s = SearchBox.Text.Trim().ToLower();
+            var fb = (BookFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+            var fr = (RoomFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+
             _view.Filter = o =>
             {
-                var x = (BookCopyViewModel)o;
-                return string.IsNullOrEmpty(f)
-                    || x.BookTitle.ToLower().Contains(f)
-                    || x.ReadingRoomName.ToLower().Contains(f);
+                var vm = (BookCopyViewModel)o;
+                var bySearch = string.IsNullOrEmpty(s)
+                    || vm.BookTitle.ToLower().Contains(s)
+                    || vm.ReadingRoomName.ToLower().Contains(s);
+                var byBook = string.IsNullOrEmpty(fb) || vm.BookTitle.ToLower() == fb;
+                var byRoom = string.IsNullOrEmpty(fr) || vm.ReadingRoomName.ToLower() == fr;
+                return bySearch && byBook && byRoom;
             };
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            if (new BookCopyEditWindow(_svc).ShowDialog() == true) RefreshGrid();
+            if (new BookCopyEditWindow(_svc).ShowDialog() == true)
+                Refresh();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if (CopiesGrid.SelectedItem is BookCopyViewModel vm)
             {
-                var c = _svc.GetCopyById(vm.Id);
-                if (new BookCopyEditWindow(_svc, c).ShowDialog() == true) RefreshGrid();
+                var model = _svc.GetCopyById(vm.Id);
+                if (new BookCopyEditWindow(_svc, model).ShowDialog() == true)
+                    Refresh();
             }
         }
 
@@ -56,8 +80,16 @@ namespace Lib_System.Views
                 && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _svc.DeleteCopy(vm.Id);
-                RefreshGrid();
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            _list.Clear();
+            foreach (var x in _svc.GetAllCopyDetails())
+                _list.Add(x);
+            _view.Refresh();
         }
     }
 }
