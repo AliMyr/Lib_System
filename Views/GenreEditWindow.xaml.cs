@@ -7,25 +7,26 @@ namespace Lib_System.Views
     public partial class GenreEditWindow : Window
     {
         private readonly IGenreService _svc;
-        public Genre Genre { get; private set; }
+        private readonly Genre _model;
 
-        public GenreEditWindow(IGenreService svc, Genre genre = null)
+        public GenreEditWindow(IGenreService svc, Genre model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Genre = genre != null
-                ? new Genre { Id = genre.Id, Title = genre.Title }
-                : new Genre();
-            TitleBox.Text = Genre.Title;
+            _model = model ?? new Genre();
+
+            TitleBox.Text = _model.Title;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Genre.Title = TitleBox.Text.Trim();
-            if (Genre.Id == 0)
-                Genre.Id = _svc.CreateGenre(Genre);
+            _model.Title = TitleBox.Text.Trim();
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateGenre(_model);
             else
-                _svc.UpdateGenre(Genre);
+                _svc.UpdateGenre(_model);
+
             DialogResult = true;
         }
 
