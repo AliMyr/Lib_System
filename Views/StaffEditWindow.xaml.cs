@@ -1,7 +1,7 @@
-﻿// Views/StaffEditWindow.xaml.cs
-using System;
+﻿using System.Linq;
 using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -9,46 +9,40 @@ namespace Lib_System.Views
     public partial class StaffEditWindow : Window
     {
         private readonly IStaffService _svc;
-        public Staff Staff { get; private set; }
+        private readonly IRoleService _roleSvc = new RoleService(new DbService());
+        private readonly Staff _model;
 
-        public StaffEditWindow(IStaffService svc, Staff staff = null)
+        public StaffEditWindow(IStaffService svc, Staff model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Staff = staff != null
-                ? new Staff
-                {
-                    Id = staff.Id,
-                    LastName = staff.LastName,
-                    FirstName = staff.FirstName,
-                    MiddleName = staff.MiddleName,
-                    RoleId = staff.RoleId,
-                    HiredDate = staff.HiredDate,
-                    Phone = staff.Phone
-                }
-                : new Staff();
+            _model = model ?? new Staff();
 
-            LastNameBox.Text = Staff.LastName;
-            FirstNameBox.Text = Staff.FirstName;
-            MiddleNameBox.Text = Staff.MiddleName;
-            RoleIdBox.Text = Staff.RoleId?.ToString() ?? "";
-            HiredDateBox.Text = Staff.HiredDate?.ToString("yyyy-MM-dd") ?? "";
-            PhoneBox.Text = Staff.Phone;
+            LastBox.Text = _model.LastName;
+            FirstBox.Text = _model.FirstName;
+            MidBox.Text = _model.MiddleName;
+            PhoneBox.Text = _model.Phone;
+            DatePicker.SelectedDate = _model.HiredDate;
+
+            var roles = _roleSvc.GetAllRoleDetails().ToList();
+            RoleBox.ItemsSource = roles;
+            if (_model.RoleId.HasValue)
+                RoleBox.SelectedValue = _model.RoleId.Value;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Staff.LastName = LastNameBox.Text.Trim();
-            Staff.FirstName = FirstNameBox.Text.Trim();
-            Staff.MiddleName = MiddleNameBox.Text.Trim();
-            Staff.RoleId = int.TryParse(RoleIdBox.Text.Trim(), out var ri) ? ri : (int?)null;
-            Staff.HiredDate = DateTime.TryParse(HiredDateBox.Text.Trim(), out var hd) ? hd : (DateTime?)null;
-            Staff.Phone = PhoneBox.Text.Trim();
+            _model.LastName = LastBox.Text.Trim();
+            _model.FirstName = FirstBox.Text.Trim();
+            _model.MiddleName = MidBox.Text.Trim();
+            _model.Phone = PhoneBox.Text.Trim();
+            _model.HiredDate = DatePicker.SelectedDate;
+            _model.RoleId = RoleBox.SelectedValue as int?;
 
-            if (Staff.Id == 0)
-                Staff.Id = _svc.CreateStaff(Staff);
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateStaff(_model);
             else
-                _svc.UpdateStaff(Staff);
+                _svc.UpdateStaff(_model);
 
             DialogResult = true;
         }
