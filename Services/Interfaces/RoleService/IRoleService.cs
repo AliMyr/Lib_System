@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface IRoleService
     {
-        IEnumerable<Role> GetAllRoles();
+        IEnumerable<RoleViewModel> GetAllRoleDetails();
+        Role GetRoleById(int id);
         int CreateRole(Role role);
         bool UpdateRole(Role role);
         bool DeleteRole(int id);

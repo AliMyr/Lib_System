@@ -11,27 +11,32 @@ namespace Lib_System.Services
         private readonly IDbService _db;
         public RoleService(IDbService db) => _db = db;
 
-        public IEnumerable<Role> GetAllRoles()
+        public IEnumerable<RoleViewModel> GetAllRoleDetails()
         {
             using IDbConnection c = _db.GetConnection();
             c.Open();
-            return c.Query<Role>("SELECT id AS Id, title AS Title FROM MA_roles");
+            return c.Query<RoleViewModel>("SELECT id AS Id, title AS Title FROM MA_roles");
         }
 
-        public int CreateRole(Role r)
+        public Role GetRoleById(int id)
         {
             using IDbConnection c = _db.GetConnection();
             c.Open();
-            return c.ExecuteScalar<int>(
-                @"INSERT INTO MA_roles (title) VALUES (@Title);
-                  SELECT LAST_INSERT_ID();", r);
+            return c.QuerySingle<Role>("SELECT id AS Id, title AS Title FROM MA_roles WHERE id=@Id", new { Id = id });
         }
 
-        public bool UpdateRole(Role r)
+        public int CreateRole(Role role)
         {
             using IDbConnection c = _db.GetConnection();
             c.Open();
-            return c.Execute("UPDATE MA_roles SET title=@Title WHERE id=@Id", r) > 0;
+            return c.ExecuteScalar<int>(@"INSERT INTO MA_roles (title) VALUES (@Title); SELECT LAST_INSERT_ID();", role);
+        }
+
+        public bool UpdateRole(Role role)
+        {
+            using IDbConnection c = _db.GetConnection();
+            c.Open();
+            return c.Execute("UPDATE MA_roles SET title=@Title WHERE id=@Id", role) > 0;
         }
 
         public bool DeleteRole(int id)
