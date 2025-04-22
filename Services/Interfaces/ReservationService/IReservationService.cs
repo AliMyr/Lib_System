@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface IReservationService
     {
-        IEnumerable<Reservation> GetAllReservations();
+        IEnumerable<ReservationViewModel> GetAllReservationDetails();
+        Reservation GetReservationById(int id);
         int CreateReservation(Reservation res);
         bool UpdateReservation(Reservation res);
         bool DeleteReservation(int id);
