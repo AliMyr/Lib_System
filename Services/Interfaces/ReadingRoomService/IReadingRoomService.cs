@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface IReadingRoomService
     {
-        IEnumerable<ReadingRoom> GetAllRooms();
+        IEnumerable<ReadingRoomViewModel> GetAllRoomDetails();
+        ReadingRoom GetRoomById(int id);
         int CreateRoom(ReadingRoom room);
         bool UpdateRoom(ReadingRoom room);
         bool DeleteRoom(int id);
