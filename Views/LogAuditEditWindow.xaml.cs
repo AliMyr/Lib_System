@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Lib_System.Models;
+using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 
 namespace Lib_System.Views
@@ -8,30 +10,41 @@ namespace Lib_System.Views
     public partial class LogAuditEditWindow : Window
     {
         private readonly ILogAuditService _svc;
-        public LogAudit Audit { get; private set; }
+        private readonly ILogUserService _userSvc = new LogUserService(new DbService());
+        private readonly LogAudit _model;
 
-        public LogAuditEditWindow(ILogAuditService svc, LogAudit audit = null)
+        public LogAuditEditWindow(ILogAuditService svc, LogAudit model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Audit = audit != null
-                ? new LogAudit { Id = audit.Id, UserId = audit.UserId, Action = audit.Action, CreatedAt = audit.CreatedAt }
-                : new LogAudit { CreatedAt = DateTime.Now };
-            UserBox.Text = Audit.UserId?.ToString() ?? "";
-            ActionBox.Text = Audit.Action;
-            CreatedBox.Text = Audit.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+            _model = model ?? new LogAudit();
+
+            var users = _userSvc.GetAllUserDetails().ToList();
+            UserBox.ItemsSource = users;
+
+            if (_model.Id != 0)
+            {
+                UserBox.SelectedValue = (ulong)(_model.UserId ?? 0);
+                ActionBox.Text = _model.Action;
+                DatePicker.SelectedDate = _model.CreatedAt;
+            }
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Audit.UserId = int.TryParse(UserBox.Text.Trim(), out var u) ? u : (int?)null;
-            Audit.Action = ActionBox.Text.Trim();
-            Audit.CreatedAt = DateTime.ParseExact(CreatedBox.Text.Trim(), "yyyy-MM-dd HH:mm:ss", null);
-            if (Audit.Id == 0) Audit.Id = _svc.CreateAudit(Audit);
-            else _svc.UpdateAudit(Audit);
+            _model.UserId = (int)(UserBox.SelectedValue ?? 0);
+            _model.Action = ActionBox.Text.Trim();
+            _model.CreatedAt = DatePicker.SelectedDate ?? DateTime.Now;
+
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateAudit(_model);
+            else
+                _svc.UpdateAudit(_model);
+
             DialogResult = true;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+            => DialogResult = false;
     }
 }
