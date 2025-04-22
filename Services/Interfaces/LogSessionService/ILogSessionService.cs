@@ -5,7 +5,8 @@ namespace Lib_System.Services.Interfaces
 {
     public interface ILogSessionService
     {
-        IEnumerable<LogSession> GetAllSessions();
+        IEnumerable<LogSessionViewModel> GetAllSessionDetails();
+        LogSession GetSessionById(ulong id);
         ulong CreateSession(LogSession session);
         bool UpdateSession(LogSession session);
         bool DeleteSession(ulong id);
