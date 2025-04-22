@@ -7,25 +7,23 @@ namespace Lib_System.Views
     public partial class RoleEditWindow : Window
     {
         private readonly IRoleService _svc;
-        public Role Role { get; private set; }
+        private readonly Role _model;
 
-        public RoleEditWindow(IRoleService svc, Role role = null)
+        public RoleEditWindow(IRoleService svc, Role model = null)
         {
             InitializeComponent();
             _svc = svc;
-            Role = role != null
-                ? new Role { Id = role.Id, Title = role.Title }
-                : new Role();
-            TitleBox.Text = Role.Title;
+            _model = model ?? new Role();
+            TitleBox.Text = _model.Title;
         }
 
-        private void Ok_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Role.Title = TitleBox.Text.Trim();
-            if (Role.Id == 0)
-                Role.Id = _svc.CreateRole(Role);
+            _model.Title = TitleBox.Text.Trim();
+            if (_model.Id == 0)
+                _model.Id = _svc.CreateRole(_model);
             else
-                _svc.UpdateRole(Role);
+                _svc.UpdateRole(_model);
             DialogResult = true;
         }
 
