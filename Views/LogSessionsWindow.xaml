@@ -3,18 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Session Logs" Height="450" Width="800">
     <DockPanel Margin="10">
-        <StackPanel DockPanel.Dock="Top"
-                Orientation="Horizontal"
-                Margin="0,0,0,10">
-            <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <TextBox x:Name="FilterBox"
-               Width="200"
-               Margin="0,0,10,0"
-               TextChanged="FilterBox_TextChanged"/>
-            <Button Content="Add"    Width="80" Click="Add_Click"    Margin="0,0,5,0"/>
-            <Button Content="Edit"   Width="80" Click="Edit_Click"   Margin="0,0,5,0"/>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="Add"    Width="80" Click="Add_Click"/>
+            <Button Content="Edit"   Width="80" Click="Edit_Click"/>
             <Button Content="Delete" Width="80" Click="Delete_Click"/>
-        </StackPanel>
+            <Separator/>
+            <TextBox x:Name="SearchBox"
+               Width="200"
+               Margin="10,0,0,0"
+               ToolTip="Search…"
+               TextChanged="FilterControlChanged"/>
+        </ToolBar>
+
+        <Expander Header="Filters"
+              DockPanel.Dock="Top"
+              IsExpanded="False"
+              Margin="0,5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="User:"   VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ComboBox x:Name="UserFilterBox"
+                  Width="150"
+                  SelectionChanged="FilterControlChanged"/>
+                <TextBlock Text="Token:"  VerticalAlignment="Center" Margin="10,0,5,0"/>
+                <ComboBox x:Name="TokenFilterBox"
+                  Width="200"
+                  SelectionChanged="FilterControlChanged"/>
+            </StackPanel>
+        </Expander>
+
         <DataGrid x:Name="SessionsGrid"
               AutoGenerateColumns="False"
               IsReadOnly="True"

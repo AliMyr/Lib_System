@@ -11,39 +11,58 @@ namespace Lib_System.Views
     public partial class LogSessionsWindow : Window
     {
         private readonly ILogSessionService _svc;
+        private readonly System.Collections.Generic.IList<LogSessionViewModel> _list;
         private readonly CollectionView _view;
 
         public LogSessionsWindow()
         {
             InitializeComponent();
             _svc = new LogSessionService(new DbService());
-            RefreshGrid();
-            _view = (CollectionView)CollectionViewSource
-                        .GetDefaultView(SessionsGrid.ItemsSource);
+            _list = _svc.GetAllSessionDetails().ToList();
+            SessionsGrid.ItemsSource = _list;
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(_list);
+
+            var users = _list
+                .Select(x => x.Username)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            users.Insert(0, string.Empty);
+            UserFilterBox.ItemsSource = users;
+
+            var tokens = _list
+                .Select(x => x.Token)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            tokens.Insert(0, string.Empty);
+            TokenFilterBox.ItemsSource = tokens;
         }
 
-        private void RefreshGrid()
-            => SessionsGrid.ItemsSource = _svc
-                        .GetAllSessionDetails()
-                        .ToList();
-
-        private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void FilterControlChanged(object sender, RoutedEventArgs e)
         {
-            var f = FilterBox.Text.Trim().ToLower();
+            var s = SearchBox.Text.Trim().ToLower();
+            var fu = (UserFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+            var ft = (TokenFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+
             _view.Filter = o =>
             {
-                var s = (LogSessionViewModel)o;
-                return string.IsNullOrEmpty(f)
-                    || s.Username.ToLower().Contains(f)
-                    || s.Token.ToLower().Contains(f);
+                var vm = (LogSessionViewModel)o;
+                var bySearch = string.IsNullOrEmpty(s)
+                    || vm.Username.ToLower().Contains(s)
+                    || vm.Token.ToLower().Contains(s);
+                var byUser = string.IsNullOrEmpty(fu)
+                    || vm.Username.ToLower() == fu;
+                var byToken = string.IsNullOrEmpty(ft)
+                    || vm.Token.ToLower() == ft;
+                return bySearch && byUser && byToken;
             };
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            var win = new LogSessionEditWindow(_svc);
-            if (win.ShowDialog() == true)
-                RefreshGrid();
+            if (new LogSessionEditWindow(_svc).ShowDialog() == true)
+                Refresh();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -51,21 +70,27 @@ namespace Lib_System.Views
             if (SessionsGrid.SelectedItem is LogSessionViewModel vm)
             {
                 var model = _svc.GetSessionById(vm.Id);
-                var win = new LogSessionEditWindow(_svc, model);
-                if (win.ShowDialog() == true)
-                    RefreshGrid();
+                if (new LogSessionEditWindow(_svc, model).ShowDialog() == true)
+                    Refresh();
             }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (SessionsGrid.SelectedItem is LogSessionViewModel vm
-                && MessageBox.Show("Delete?", "",
-                       MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _svc.DeleteSession(vm.Id);
-                RefreshGrid();
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            _list.Clear();
+            foreach (var x in _svc.GetAllSessionDetails())
+                _list.Add(x);
+            _view.Refresh();
         }
     }
 }
