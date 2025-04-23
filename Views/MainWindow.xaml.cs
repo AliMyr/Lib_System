@@ -55,6 +55,8 @@ namespace Lib_System
         private void ShowUsers_Click(object sender, RoutedEventArgs e)
             => new Views.UsersWindow().Show();
 
+        private void ShowReports_Click(object sender, RoutedEventArgs e)
+            => new ReportsWindow().Show();
 
     }
 }

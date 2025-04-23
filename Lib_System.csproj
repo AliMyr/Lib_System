@@ -125,11 +125,13 @@
     <Compile Include="Models\GenreViewModel.cs" />
     <Compile Include="Models\Language.cs" />
     <Compile Include="Models\LanguageViewModel.cs" />
+    <Compile Include="Models\LoansByMonthViewModel.cs" />
     <Compile Include="Models\LogAudit.cs" />
     <Compile Include="Models\LogAuditViewModel.cs" />
     <Compile Include="Models\LogSession.cs" />
     <Compile Include="Models\LogSessionViewModel.cs" />
     <Compile Include="Models\LogUserViewModel.cs" />
+    <Compile Include="Models\PopularBookViewModel.cs" />
     <Compile Include="Models\Publisher.cs" />
     <Compile Include="Models\PublisherViewModel.cs" />
     <Compile Include="Models\Reader.cs" />
@@ -174,6 +176,8 @@
     <Compile Include="Services\Interfaces\ReaderService\ReaderService.cs" />
     <Compile Include="Services\Interfaces\ReadingRoomService\IReadingRoomService.cs" />
     <Compile Include="Services\Interfaces\ReadingRoomService\ReadingRoomService.cs" />
+    <Compile Include="Services\Interfaces\ReportService\IReportService.cs" />
+    <Compile Include="Services\Interfaces\ReportService\ReportService.cs" />
     <Compile Include="Services\Interfaces\ReservationService\IReservationService.cs" />
     <Compile Include="Services\Interfaces\ReservationService\ReservationService.cs" />
     <Compile Include="Services\Interfaces\RoleService\IRoleService.cs" />
@@ -257,6 +261,9 @@
     </Compile>
     <Compile Include="Views\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportsWindow.xaml.cs">
+      <DependentUpon>ReportsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReservationEditWindow.xaml.cs">
       <DependentUpon>ReservationEditWindow.xaml</DependentUpon>
@@ -395,6 +402,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\RegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

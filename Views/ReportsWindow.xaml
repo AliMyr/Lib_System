@@ -1,0 +1,22 @@
+﻿<Window x:Class="Lib_System.Views.ReportsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reports" Height="500" Width="700">
+    <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Report:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox x:Name="ReportTypeBox" Width="200" SelectionChanged="ReportTypeBox_SelectionChanged">
+                <ComboBoxItem Content="Loans by Month" />
+                <ComboBoxItem Content="Top 5 Books" />
+            </ComboBox>
+            <TextBlock Text="Top N:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+            <TextBox x:Name="TopNBox" Width="50" Text="5"/>
+            <Button Content="Generate" Width="80" Click="Generate_Click" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <DataGrid x:Name="ReportGrid"
+              AutoGenerateColumns="True"
+              IsReadOnly="True"
+              CanUserSortColumns="True"/>
+    </DockPanel>
+</Window>

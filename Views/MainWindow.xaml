@@ -20,6 +20,7 @@
             <Button Content="Audit Log"             Click="ShowAudit_Click"        Margin="0,5" Height="30"/>
             <Button Content="Session Log"           Click="ShowSessions_Click"     Margin="0,5" Height="30"/>
             <Button Content="Manage Users"          Click="ShowUsers_Click"        Margin="0,5" Height="30"/>
+            <Button Content="Reports"               Click="ShowReports_Click"      Margin="0,5" Height="30"/>
         </StackPanel>
     </ScrollViewer>
 </Window>
