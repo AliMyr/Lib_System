@@ -2,6 +2,7 @@
 using Lib_System.Services;
 using Lib_System.Services.Interfaces;
 using Lib_System.Views;
+using OfficeOpenXml;
 
 namespace Lib_System
 {
@@ -9,6 +10,7 @@ namespace Lib_System
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            ExcelPackage.License.SetNonCommercialPersonal("Ali");
             IDbService dbService = new DbService();
             IPasswordHasher hasher = new PasswordHasher();
             IAuthService authService = new AuthService(dbService, hasher);
