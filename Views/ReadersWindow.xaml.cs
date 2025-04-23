@@ -11,41 +11,60 @@ namespace Lib_System.Views
     public partial class ReadersWindow : Window
     {
         private readonly IReaderService _svc;
+        private readonly System.Collections.Generic.IList<ReaderViewModel> _list;
         private readonly CollectionView _view;
 
         public ReadersWindow()
         {
             InitializeComponent();
             _svc = new ReaderService(new DbService());
-            RefreshGrid();
-            _view = (CollectionView)CollectionViewSource
-                        .GetDefaultView(ReadersGrid.ItemsSource);
+            _list = _svc.GetAllReaderDetails().ToList();
+            ReadersGrid.ItemsSource = _list;
+            _view = (CollectionView)CollectionViewSource.GetDefaultView(_list);
+
+            var names = _list
+                .Select(x => x.FullName)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            names.Insert(0, string.Empty);
+            NameFilterBox.ItemsSource = names;
+
+            var dates = _list
+                .Select(x => x.RegistrationDate?.ToString("yyyy-MM-dd") ?? string.Empty)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+            dates.Insert(0, string.Empty);
+            DateFilterBox.ItemsSource = dates;
         }
 
-        private void RefreshGrid()
-            => ReadersGrid.ItemsSource = _svc
-                        .GetAllReaderDetails()
-                        .ToList();
-
-        private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void FilterControlChanged(object sender, RoutedEventArgs e)
         {
-            var f = FilterBox.Text.Trim().ToLower();
+            var s = SearchBox.Text.Trim().ToLower();
+            var fn = (NameFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+            var fd = (DateFilterBox.SelectedItem as string)?.ToLower() ?? string.Empty;
+
             _view.Filter = o =>
             {
                 var r = (ReaderViewModel)o;
-                return string.IsNullOrEmpty(f)
-                    || r.FullName.ToLower().Contains(f)
-                    || r.Phone.ToLower().Contains(f)
-                    || r.Address.ToLower().Contains(f)
-                    || (r.RegistrationDate?.ToString("yyyy-MM-dd")
-                           .Contains(f) ?? false);
+                var bySearch = string.IsNullOrEmpty(s)
+                    || r.FullName.ToLower().Contains(s)
+                    || r.Phone.ToLower().Contains(s)
+                    || r.Address.ToLower().Contains(s)
+                    || (r.RegistrationDate?.ToString("yyyy-MM-dd").ToLower().Contains(s) ?? false);
+                var byName = string.IsNullOrEmpty(fn)
+                    || r.FullName.ToLower() == fn;
+                var byDate = string.IsNullOrEmpty(fd)
+                    || (r.RegistrationDate?.ToString("yyyy-MM-dd").ToLower() == fd);
+                return bySearch && byName && byDate;
             };
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (new ReaderEditWindow(_svc).ShowDialog() == true)
-                RefreshGrid();
+                Refresh();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -54,19 +73,26 @@ namespace Lib_System.Views
             {
                 var model = _svc.GetReaderById(vm.Id);
                 if (new ReaderEditWindow(_svc, model).ShowDialog() == true)
-                    RefreshGrid();
+                    Refresh();
             }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (ReadersGrid.SelectedItem is ReaderViewModel vm
-                && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo)
-                       == MessageBoxResult.Yes)
+                && MessageBox.Show("Delete?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 _svc.DeleteReader(vm.Id);
-                RefreshGrid();
+                Refresh();
             }
+        }
+
+        private void Refresh()
+        {
+            _list.Clear();
+            foreach (var x in _svc.GetAllReaderDetails())
+                _list.Add(x);
+            _view.Refresh();
         }
     }
 }
