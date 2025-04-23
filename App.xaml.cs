@@ -9,13 +9,18 @@ namespace Lib_System
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            IDbService db = new DbService();
+            IDbService dbService = new DbService();
             IPasswordHasher hasher = new PasswordHasher();
-            IAuthService auth = new AuthService(db, hasher);
-            ILogSessionService ss = new LogSessionService(db);
-            ILogAuditService au = new LogAuditService(db);
+            IAuthService authService = new AuthService(dbService, hasher);
+            ILogSessionService sessionService = new LogSessionService(dbService);
+            ILogAuditService auditService = new LogAuditService(dbService);
 
-            new LoginWindow(auth, ss, au, db).Show();
+            var login = new LoginWindow(
+                authService,
+                sessionService,
+                auditService,
+                dbService);
+            login.Show();
         }
     }
 }

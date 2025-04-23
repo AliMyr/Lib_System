@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using Dapper;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
 
@@ -9,56 +8,50 @@ namespace Lib_System.Views
     public partial class RegisterWindow : Window
     {
         private readonly IAuthService _auth;
-        private readonly ILogAuditService _audit;
+        private readonly ILogAuditService _auditSvc;
         private readonly IDbService _db;
 
         public RegisterWindow(
-            IAuthService authService,
-            ILogAuditService auditService,
+            IAuthService auth,
+            ILogAuditService auditSvc,
             IDbService dbService)
         {
             InitializeComponent();
-            _auth = authService;
-            _audit = auditService;
+            _auth = auth;
+            _auditSvc = auditSvc;
             _db = dbService;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            var username = UsernameBox.Text.Trim();
-            var email = EmailBox.Text.Trim();
-            var plain = PasswordBox.Password.Trim();
-
             var user = new LogUser
             {
-                Username = username,
-                Email = email,
-                CreatedAt = DateTime.Now
+                Username = UsernameBox.Text.Trim(),
+                Email = EmailBox.Text.Trim()
             };
+            var pwd = PasswordBox.Password.Trim();
 
-            if (!_auth.Register(user, plain))
+            if (_auth.Register(user, pwd))
+            {
+                _auditSvc.CreateAudit(new LogAudit
+                {
+                    UserId = user.Id,
+                    Action = "Register",
+                    CreatedAt = DateTime.Now
+                });
+
+                MessageBox.Show("Registration successful.");
+                Close();
+            }
+            else
             {
                 MessageBox.Show("Registration failed.");
-                return;
             }
-
-            var created = _db.GetConnection()
-                .QuerySingle<LogUser>(
-                    "SELECT id AS Id FROM MA_log_users WHERE username = @Username",
-                    new { Username = username });
-
-            _audit.CreateAudit(new LogAudit
-            {
-                UserId = (int)created.Id,
-                Action = "Register",
-                CreatedAt = DateTime.Now
-            });
-
-            MessageBox.Show("Registration successful.");
-            Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
-            => Close();
+        {
+            Close();
+        }
     }
 }

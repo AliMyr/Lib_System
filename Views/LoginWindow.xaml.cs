@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Windows;
+using Dapper;
 using Lib_System.Models;
 using Lib_System.Services.Interfaces;
-using Dapper;
-using Lib_System.Services;
 
 namespace Lib_System.Views
 {
     public partial class LoginWindow : Window
     {
         private readonly IAuthService _auth;
-        private readonly ILogSessionService _ss;
-        private readonly ILogAuditService _au;
+        private readonly ILogSessionService _sessionSvc;
+        private readonly ILogAuditService _auditSvc;
         private readonly IDbService _db;
 
         public LoginWindow(
@@ -22,33 +21,41 @@ namespace Lib_System.Views
         {
             InitializeComponent();
             _auth = auth;
-            _ss = sessionSvc;
-            _au = auditSvc;
+            _sessionSvc = sessionSvc;
+            _auditSvc = auditSvc;
             _db = dbService;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var u = UsernameBox.Text.Trim();
-            var p = PasswordBox.Password.Trim();
-            if (!_auth.Login(u, p)) { MessageBox.Show("Login failed."); return; }
+            var username = UsernameBox.Text.Trim();
+            var password = PasswordBox.Password.Trim();
 
+            if (!_auth.Login(username, password))
+            {
+                MessageBox.Show("Login failed.");
+                return;
+            }
+
+            // получаем ID только что залогиненного
             var user = _db.GetConnection()
                 .QueryFirst<LogUser>(
-                    "SELECT id AS Id FROM MA_log_users WHERE username=@u",
-                    new { u });
+                    "SELECT id AS Id FROM MA_log_users WHERE username = @Username",
+                    new { Username = username });
 
-            _ss.CreateSession(new LogSession
+            // создаём сессию
+            _sessionSvc.CreateSession(new LogSession
             {
-                UserId = (int)user.Id,
+                UserId = user.Id,
                 Token = Guid.NewGuid().ToString(),
                 CreatedAt = DateTime.Now,
                 ExpiresAt = DateTime.Now.AddHours(8)
             });
 
-            _au.CreateAudit(new LogAudit
+            // записываем в аудит
+            _auditSvc.CreateAudit(new LogAudit
             {
-                UserId = (int)user.Id,
+                UserId = user.Id,
                 Action = "Login",
                 CreatedAt = DateTime.Now
             });
@@ -59,9 +66,9 @@ namespace Lib_System.Views
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            var win = new RegisterWindow(_auth, _au, _db);
+            // передаём все нужные сервисы, чтобы из окна регистрации сразу писать аудит
+            var win = new RegisterWindow(_auth, _auditSvc, _db);
             win.ShowDialog();
         }
     }
 }
-
